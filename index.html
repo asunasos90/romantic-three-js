@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💕 บอกรักแฟน - Romantic Three.js Experience</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        #canvas {
+            display: block;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.8s ease-out;
+            pointer-events: all;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #ff6b9d;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin: 30px 0 15px 0;
+        }
+
+        p {
+            color: #333;
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin: 15px 0;
+        }
+
+        .memory {
+            background: #fff9e6;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 5px solid #ffc107;
+            text-align: left;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 1em;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            pointer-events: all;
+        }
+
+        .btn-confess {
+            background: #ff6b9d;
+            color: white;
+        }
+
+        .btn-confess:hover {
+            background: #ff5287;
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 107, 157, 0.4);
+        }
+
+        .btn-miss {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-miss:hover {
+            background: #5568d3;
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-memory {
+            background: #26a69a;
+            color: white;
+        }
+
+        .btn-memory:hover {
+            background: #1e7f72;
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(38, 166, 154, 0.4);
+        }
+
+        .btn-back {
+            background: #999;
+            color: white;
+        }
+
+        .btn-back:hover {
+            background: #777;
+            transform: scale(1.05);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .heart {
+            color: #ff6b9d;
+            animation: heartBeat 0.6s ease-in-out infinite;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        .emoji {
+            font-size: 3em;
+            margin: 15px 0;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .location-icon {
+            font-size: 2em;
+            margin-right: 10px;
+        }
+
+        .scene-title {
+            color: #26a69a;
+            font-weight: bold;
+            font-size: 1.3em;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Main Menu -->
+        <div id="mainMenu" class="card">
+            <div class="emoji">💕</div>
+            <h1>ถึงคนที่รักที่สุด</h1>
+            <p style="font-size: 1.2em; margin: 20px 0;">อยากบอกบางอย่าง...</p>
+            
+            <div class="buttons">
+                <button class="btn-confess" onclick="showConfess()">💕 บอกรักแฟน</button>
+                <button class="btn-miss" onclick="showMiss()">💭 บอกคิดถึง</button>
+                <button class="btn-memory" onclick="showMemory()">🏖️ ความทรงจำ</button>
+            </div>
+        </div>
+
+        <!-- Confess Section -->
+        <div id="confessSection" class="card hidden">
+            <div class="emoji">💗</div>
+            <h1>ฉันรักแฟน <span class="heart">❤️</span></h1>
+            <p>ตั้งแต่วันแรกที่เราพบกัน หัวใจของฉันก็เต้นแรงสำหรับแฟน</p>
+            
+            <p>ฉันรักความยิ้มของแฟน รักเสียงหัวเราะของแฟน รักทุกอย่างเกี่ยวกับแฟน</p>
+            
+            <p>ในทุกวัน แม้ว่าจะวุ่นวายแค่ไหน คิดถึงแฟน มันเพียงพอที่จะทำให้วันของฉันสว่างขึ้น</p>
+            
+            <p style="font-size: 1.3em; margin-top: 25px;">ขอบคุณที่มีแฟนในชีวิตของฉัน <span class="heart">❤️</span></p>
+            
+            <div class="buttons">
+                <button class="btn-back" onclick="backToMenu()">← กลับเมนู</button>
+            </div>
+        </div>
+
+        <!-- Miss Section -->
+        <div id="missSection" class="card hidden">
+            <div class="emoji">💭</div>
+            <h1>คิดถึงแฟนมาก</h1>
+            <p>เมื่อแฟนไม่อยู่ข้างเรา วันเหล่านั้นดูเหมือนจะยาวนานขึ้นนะ</p>
+            
+            <p>คิดถึงการที่เราอยู่ด้วยกัน คิดถึงการถูกกอด คิดถึงการที่เราเดินเคียงข้างกัน</p>
+            
+            <p>แต่ฉันรู้ว่า ไม่ว่าเราจะห่างไกลแค่ไหน หัวใจของฉันก็ยังอยู่กับแฟนอยู่เสมอ</p>
+            
+            <p style="margin-top: 25px;">อยากจะกอดแฟนตอนนี้ เลย... 🫂</p>
+            
+            <p style="font-size: 1.2em; color: #667eea; margin-top: 20px;">
+                รอบรรพกาลถึงวันที่เราจะได้อยู่ด้วยกันอีกครั้ง 💙
+            </p>
+            
+            <div class="buttons">
+                <button class="btn-back" onclick="backToMenu()">← กลับเมนู</button>
+            </div>
+        </div>
+
+        <!-- Memory Section -->
+        <div id="memorySection" class="card hidden">
+            <div class="emoji">🏖️</div>
+            <h1>ความทรงจำที่ผ่านมา</h1>
+            
+            <div class="memory">
+                <p class="scene-title">🏖️ ที่ชายหาด</p>
+                <p>วันที่เราไปชายหาดด้วยกัน ฉันจำได้ว่าแสงอาทิตย์ส่องลงมากับหาด และแฟนหัวเราะสดใสไปกับลมหายใจของทะเล เราเดินเท้าเปล่าบนทราย จับมือกันแน่นไม่ปล่อย นั่นเป็นหนึ่งในวันที่สวยที่สุดของฉัน</p>
+            </div>
+
+            <div class="memory">
+                <p class="scene-title">🍽️ ร้านอาหารโปรด</p>
+                <p>ทุกครั้งที่ไปที่ร้านอาหารโปรด เรานั่งโต๊ะตัวเดียวกัน แฟนชี้ให้เห็นขนมอร่อยและเรากินอาหารด้วยกัน สนุกสนานกับการพูดคุยเรื่องราวดำเนิน คิดถึงสัย ต่อ ด้วยแฟน</p>
+            </div>
+
+            <div class="memory">
+                <p class="scene-title">🌙 คืนที่มองดาวด้วยกัน</p>
+                <p>เมื่อเราไปนั่งมองดาวบนหลังคา หรือที่ใจกลางของมหาวิทยาลัย เราพูดถึงความฝันของเรา สัญญากับกันและกัน และแฟนบอกว่า "ตราบใดที่มีดาวอยู่ในท้องฟ้า ฉันก็จะคิดถึงแฟนเสมอ" 💫</p>
+            </div>
+
+            <div class="memory">
+                <p class="scene-title">🎬 ดูหนังด้วยกัน</p>
+                <p>นั่งโรงภาพยนตร์โปรด กล้วยต้นแบบ น้ำหวาน และแฟนของ ฉันขณะฉันขนาดเล็ก และแฟนกระแสหมากจมหน้าแฟน เสมอ เมื่อมีฉากน่ากลัว ฉันหัวเราะที่การตอบสนองของแฟน นั่นสำเร็จคือตลกที่สุดขณะ</p>
+            </div>
+
+            <p style="margin-top: 25px; font-size: 1.1em; color: #26a69a;">ความทรงจำเหล่านี้คือสมบัติที่ฉันเก็บไว้ในหัวใจตลอดไป ✨</p>
+            
+            <div class="buttons">
+                <button class="btn-back" onclick="backToMenu()">← กลับเมนู</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
